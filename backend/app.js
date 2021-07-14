@@ -33,7 +33,7 @@ app.use((error, req, res, next) => {
   res.status(error.code || 500);
   res.json({ message: error.message || "An unknown error occured!" });
 });
-const url ="mongodb+srv://ImitaSingha:AF0opguAlOJd4EP5@cluster0.wkn3w.mongodb.net/places?retryWrites=true&w=majority";
+const url ="mongodb+srv://ImitaSingha:AF0opguAlOJd4EP5@cluster0.wkn3w.mongodb.net/mern?retryWrites=true&w=majority";
 mongoose.connect(url,{ user: process.env.MONGO_USER, pass: process.env.MONGO_PASSWORD, useNewUrlParser: true, useUnifiedTopology: true }).then(()=>{
   app.listen(5000);
 }).catch(err=>console.log("!ERROR", err))
