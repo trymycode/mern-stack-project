@@ -13,10 +13,10 @@ const signup = async (req, res, next) => {
    console.log("errors",errors)
    return next(new HttpError('Invalid inputs passed, please check your data',422))
  }
-  const { name, email, password, places } = req.body;
+  const { name, email, password } = req.body;
   let existingUser;
   try{
-    existingUser =await  User.findOne({email:email})
+    existingUser =await User.findOne({email:email})
   }catch(err){
       const error = new HttpError("Signing up failed! Please try again later.")
   return next(error);
@@ -31,7 +31,7 @@ const signup = async (req, res, next) => {
     email,
     image:"https://png.pngtree.com/png-vector/20190909/ourmid/pngtree-outline-user-icon-png-image_1727916.jpg",
     password,
-    places
+    places:[]
   });
 //  save data
 try{
