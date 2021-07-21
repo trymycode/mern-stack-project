@@ -14,7 +14,7 @@ app.use(
     extended: false,
   })
 );
-
+// CORs error handing part.Please add this middleware function before routes
 app.use((req, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader(
