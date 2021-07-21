@@ -1,12 +1,12 @@
 const express = require("express");
-const mongoose = require('mongoose');
 const bodyParser = require("body-parser");
-const HttpError = require("./models/http-error.js");
-const placesRouter = require("./routes/places-routes");
-const userRouter = require("./routes/users-routes");
-const app = express();
+const mongoose = require("mongoose");
 
-// const mongoPractice = require("./mongo/mongoose")
+const placesRoutes = require("./routes/places-routes");
+const usersRoutes = require("./routes/users-routes");
+const HttpError = require("./models/http-error");
+
+const app = express();
 
 app.use(express.json());
 app.use(
@@ -14,27 +14,43 @@ app.use(
     extended: false,
   })
 );
-// app.post('/products',mongoPractice.createProduct);
-// app.get('/products',mongoPractice.getProducts)
-app.use("/api/places", placesRouter);
-app.use("/api/users", userRouter);
-// no route found error
+
 app.use((req, res, next) => {
-  const error = new HttpError("Could not find this route", 404);
-  return next(error);
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader(
+    "Access-Control-Allow-Headers",
+    "Origin, X-Requested-With, Content-Type, Accept, Authorization"
+  );
+  res.setHeader("Access-Control-Allow-Methods", "GET, POST, PATCH, DELETE");
+
+  next();
 });
 
-// // error handling middleware
+app.use("/api/places", placesRoutes);
+app.use("/api/users", usersRoutes);
+
+app.use((req, res, next) => {
+  const error = new HttpError("Could not find this route.", 404);
+  throw error;
+});
 
 app.use((error, req, res, next) => {
   if (res.headerSent) {
     return next(error);
   }
   res.status(error.code || 500);
-  res.json({ message: error.message || "An unknown error occured!" });
+  res.json({ message: error.message || "An unknown error occurred!" });
 });
-const url ="mongodb+srv://ImitaSingha:AF0opguAlOJd4EP5@cluster0.wkn3w.mongodb.net/mern?retryWrites=true&w=majority";
-mongoose.connect(url,{ user: process.env.MONGO_USER, pass: process.env.MONGO_PASSWORD, useNewUrlParser: true, useUnifiedTopology: true }).then(()=>{
-  app.listen(5000);
-}).catch(err=>console.log("!ERROR", err))
-
+mongoose
+  .connect(
+    `mongodb+srv://ImitaSingha:Y4ZxnTIMEs8LZmZw@cluster0.wkn3w.mongodb.net/mern?retryWrites=true&w=majority`,
+    { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true }
+  )
+  .then(() => {
+    app.listen(5000, () => {
+      console.log("connected to 5000 port in backend");
+    });
+  })
+  .catch((err) => {
+    console.log("err-->", err);
+  });
