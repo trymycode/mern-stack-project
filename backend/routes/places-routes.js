@@ -1,6 +1,6 @@
 const express = require("express");
 const { check } = require("express-validator");
-
+const fileUpload = require('../middleware/file-upload');
 const placesControllers = require("../controllers/places-controller");
 
 const router = express.Router();
@@ -11,6 +11,8 @@ router.get("/user/:uid", placesControllers.getPlacesByUserId);
 
 router.post(
   "/",
+  // within the single method we have to pass the name which we will be getting in the body from the frontend data
+  fileUpload.single('image'),
   [
     check("title").not().isEmpty(),
     check("description").isLength({ min: 5 }),
