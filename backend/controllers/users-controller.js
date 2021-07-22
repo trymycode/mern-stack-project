@@ -133,6 +133,7 @@ const login = async (req, res, next) => {
   }
   let token;
   try {
+    // token generation
     token = jwt.sign(
       { userId: existingUser.id, email: existingUser.email },
       "Secter_String_Dont_Share",
