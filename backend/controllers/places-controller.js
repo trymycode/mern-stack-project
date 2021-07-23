@@ -146,6 +146,7 @@ const updatePlace = async (req, res, next) => {
   }
   // let's check from backend if the user has the authority to update the place or not
 
+  
   if (place.creator.toString() !== req.userData.userId) {
     const error = new HttpError(
       "You are not allowed to update the place details.",

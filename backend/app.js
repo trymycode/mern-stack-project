@@ -1,6 +1,6 @@
 // import default file system from nodejs
-const fs = require('fs');
-const path = require('path');
+const fs = require("fs");
+const path = require("path");
 
 const express = require("express");
 const bodyParser = require("body-parser");
@@ -17,8 +17,8 @@ app.use(
     extended: false,
   })
 );
-// upload file middleware 
-app.use('/uploads/images',express.static(path.join('uploads','images')))
+// upload file middleware
+app.use("/uploads/images", express.static(path.join("uploads", "images")));
 // CORs error handing part.Please add this middleware function before routes
 app.use((req, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", "*");
@@ -41,7 +41,7 @@ app.use((req, res, next) => {
 
 app.use((error, req, res, next) => {
   if (req.file) {
-    fs.unlink(req.file.path, err => {
+    fs.unlink(req.file.path, (err) => {
       console.log(err);
     });
   }
@@ -49,11 +49,11 @@ app.use((error, req, res, next) => {
     return next(error);
   }
   res.status(error.code || 500);
-  res.json({ message: error.message || 'An unknown error occurred!' });
+  res.json({ message: error.message || "An unknown error occurred!" });
 });
 mongoose
   .connect(
-    `mongodb+srv://ImitaSingha:Y4ZxnTIMEs8LZmZw@cluster0.wkn3w.mongodb.net/mern?retryWrites=true&w=majority`,
+    `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@cluster0.wkn3w.mongodb.net/${process.env.DB_NAME}?retryWrites=true&w=majority`,
     { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true }
   )
   .then(() => {
